@@ -1,0 +1,60 @@
+import React, { useState } from "react";
+import data from "../data.jsx/data.jsx";
+import "../components/style.css";
+
+const Home = () => {
+    const [keyword, setKeyword] = useState("");
+
+    const handleSearch = (event) => {
+        event.preventDefault();
+        const value = event.target.search.value.trim();
+        setKeyword(value);
+    };
+
+    const filteredData = keyword
+        ? data.filter((item) =>
+            item.description.toLowerCase().includes(keyword.toLowerCase())
+        )
+        : data;
+
+    return (
+        <div className="home">
+            <p>Find your lost items or report found items easily.</p>
+
+            <form onSubmit={handleSearch} className="search-form">
+                <input type="text" name="search" placeholder="Search description..." />
+                <button type="submit">Search</button>
+            </form>
+
+            <div className="feed">
+                {filteredData.length === 0 ? (
+                    <p className="empty-state">Tidak ada postingan yang cocok.</p>
+                ) : (
+                    filteredData.map((item) => (
+                        <div key={item.id} className="post-card">
+                            <div className="post-header">
+                                <img className="avatar" src={item.profileImage} alt={item.username} />
+                                <strong>{item.username}</strong>
+                            </div>
+
+                            <img className="post-image" src={item.postImage} alt={item.username} />
+
+                            <div className="post-actions">
+                                <button>💬</button>
+                                <button>✈</button>
+                            </div>
+
+                            <div className="post-caption">
+                                <strong>{item.username}</strong>
+                                <span>{item.description}</span>
+                            </div>
+                        </div>
+                    ))
+                )}
+            </div>
+        </div>
+    );
+};
+
+export default Home;
+
