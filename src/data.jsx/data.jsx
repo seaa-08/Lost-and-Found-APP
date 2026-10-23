@@ -1,22 +1,22 @@
 import zzy from "../assets/zzy.jpg";
 import ding from "../assets/ding.jpg";
-import hero from "../assets/hero.png";
-import logo from "../assets/logo.jpeg";
+import kunci from "../assets/kunci.jpeg";
+import dompet from "../assets/dompet.jpeg";
 
 const data = [
     {
         id: 1,
         username: "Zayn0416",
         profileImage: zzy,
-        postImage: hero,
-        description: "Lost wallet in the park. Please contact me if found."
+        postImage: dompet,
+        description: "Berwarna kuning. Lokasi terakhir terlihat di kantin kampus. Mohon hubungi jika menemukan."
     },
     {
         id: 2,
         username: "Ding0202",
         profileImage: ding,
-        postImage: logo,
-        description: "Found a set of keys near the library. Looking for the owner."
+        postImage: kunci,
+        description: "Menemukan sejumlah kunci di dekat perpustakaan. Mencari pemiliknya."
     }
 ];
 

@@ -19,11 +19,11 @@ const Home = () => {
 
     return (
         <div className="home">
-            <p>Find your lost items or report found items easily.</p>
+            <p>Temukan barang yang hilang atau laporkan barang yang ditemukan.</p>
 
             <form onSubmit={handleSearch} className="search-form">
-                <input type="text" name="search" placeholder="Search description..." />
-                <button type="submit">Search</button>
+                <input type="text" name="search" placeholder="Cari deskripsi..." />
+                <button type="submit">Cari</button>
             </form>
 
             <div className="feed">
