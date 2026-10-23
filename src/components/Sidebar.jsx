@@ -1,15 +1,16 @@
 import React from "react";
 import {Link} from "react-router-dom";
 
-const Sidebar=()=>{
-
-    return(
+const Sidebar = () => {
+    return (
         <nav>
-            <li><Link to="/">Beranda</Link></li>
-            <li><Link to="/Pages/Post">Post</Link></li>
-            <li><Link to="/Pages/Chat">Chat</Link></li>
-            <li><Link to="/Pages/Account">Account</Link></li>
-            <li><Link to="/Pages/Community">Community</Link></li>
+            <ul>
+                <li><Link to="/">Beranda</Link></li>
+                <li><Link to="/post">Post</Link></li>
+                <li><Link to="/chat">Chat</Link></li>
+                <li><Link to="/account">Account</Link></li>
+                <li><Link to="/setting">Setting</Link></li>
+            </ul>
         </nav>
     );
 };
