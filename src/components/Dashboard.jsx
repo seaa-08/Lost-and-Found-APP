@@ -1,14 +1,13 @@
-import React from "react";
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import Footer from "./Footer";
-import "./style.css";
+import "../style/style.css";
 
-const Dashboard = () => {
+const Dashboard = ({ username }) => {
     return (
         <div className="container">
-            <Header />
+            <Header username={username} />
             <Sidebar />
             <main className="content">
                 <Outlet />

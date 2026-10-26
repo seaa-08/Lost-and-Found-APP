@@ -72,6 +72,7 @@ nav{
     padding: 20px;
     text-decoration: none;
     border: 0.5px solid rgb(25, 64, 118);
+    display: fixed;
 }
 
 footer{
@@ -200,4 +201,48 @@ img#logo{
     padding: 18px;
     background: #edf6ff;
     border-radius: 10px;
+}
+
+.settings {
+    max-width: 500px;
+    width: 100%;
+    color: #194076;
+}
+
+.settings-page {
+    min-height: calc(100vh - 40px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.settings-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 16px 0;
+    padding: 16px;
+    background: white;
+    border: 1px solid #b4d8ff;
+    border-radius: 8px;
+}
+
+.settings-section input:not([type="checkbox"]) {
+    padding: 8px;
+    border: 1px solid #b4d8ff;
+    border-radius: 4px;
+}
+
+.settings-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.settings button {
+    padding: 8px 16px;
+    color: white;
+    background: #194076;
+    border: 0;
+    border-radius: 4px;
 }
