@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import data from "../data.jsx/data.jsx";
-import "../components/style.css";
+import "../style/style.css";
 
-const Home = () => {
+const Home = ({ username }) => {
     const [keyword, setKeyword] = useState("");
 
     const handleSearch = (event) => {
@@ -19,6 +19,7 @@ const Home = () => {
 
     return (
         <div className="home">
+            <p>Halo, {username || "Pengguna"}!</p>
             <p>Find your lost items or report found items easily.</p>
 
             <form onSubmit={handleSearch} className="search-form">
@@ -57,4 +58,3 @@ const Home = () => {
 };
 
 export default Home;
-

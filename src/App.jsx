@@ -1,13 +1,26 @@
+import { useState } from "react";
 import Dashboard from "./components/Dashboard";
 import Home from "./Pages/Home";
+import Login from "./Pages/Login";
+import Signup from "./Pages/Signup";
+import Setting from "./Pages/Setting";
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 const App = () => {
+  const [username, setUsername] = useState("");
+
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Dashboard />}>
-          <Route index element={<Home />} />
+        <Route path="/" element={<Login onLogin={setUsername} />} />
+        <Route path="/signup" element={<Signup onSignup={setUsername} />} />
+        <Route path="/dashboard" element={<Dashboard username={username} />}>
+          <Route index element={<Home username={username} />} />
+          <Route
+            path="setting"
+            element={<Setting username={username} onUsernameChange={setUsername} />}
+          />
         </Route>
       </Routes>
     </BrowserRouter>
