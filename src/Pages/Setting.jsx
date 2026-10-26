@@ -1,3 +1,4 @@
+
 import "../style/style.css";
 
 const Setting = ({ username, onUsernameChange }) => {
@@ -59,3 +60,4 @@ const Setting = ({ username, onUsernameChange }) => {
 };
 
 export default Setting;
+
