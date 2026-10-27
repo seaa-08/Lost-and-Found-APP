@@ -9,14 +9,14 @@ const data = [
         username: "Zayn0416",
         profileImage: zzy,
         postImage: dompet,
-        description: "Lost wallet in the park. Please contact me if found."
+        description: "Ditemukan dompet kuning di perpustakaan."
     },
     {
         id: 2,
         username: "Ding0202",
         profileImage: ding,
         postImage: kunci,
-        description: "Found a set of keys near the library. Looking for the owner."
+        description: "Ditemukan kunci di parkiran gedung A."
     }
 ];
 

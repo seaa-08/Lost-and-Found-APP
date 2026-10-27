@@ -19,14 +19,23 @@ const Home = ({ username }) => {
 
     return (
         <div className="home">
-            <p>Halo, {username || "Pengguna"}!</p>
-            <p>Find your lost items or report found items easily.</p>
+            <div className="home-intro">
+                <p className="home-eyebrow">SELAMAT DATANG</p>
+                <h2 className="home-title">Halo, {username || "Pengguna"}!</h2>
+                <p className="home-description">
+                    Barang hilang, barang ditemukan, kembali ke pemilik.
+                </p>
+            </div>
 
             <form onSubmit={handleSearch} className="search-form">
-                <input type="text" name="search" placeholder="Search description..." />
-                <button type="submit">Search</button>
+                <input type="text" name="search" placeholder="Cari deskripsi barang..." />
+                <button type="submit">Cari</button>
             </form>
 
+            <div className="feed-heading">
+                <h3>Postingan terbaru</h3>
+                <span>{filteredData.length} postingan</span>
+            </div>
             <div className="feed">
                 {filteredData.length === 0 ? (
                     <p className="empty-state">Tidak ada postingan yang cocok.</p>
