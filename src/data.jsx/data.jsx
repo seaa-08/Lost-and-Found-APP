@@ -11,18 +11,14 @@ const data = [
         username: "Zayn0416",
         profileImage: zzy,
         postImage: dompet,
-
         description: "Berwarna kuning. Lokasi terakhir terlihat di kantin kampus. Mohon hubungi jika menemukan."
-
     },
     {
         id: 2,
         username: "Ding0202",
         profileImage: ding,
         postImage: kunci,
-
         description: "Found a set of keys near the library. Looking for the owner."
-
     }
 ];
 

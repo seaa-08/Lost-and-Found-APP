@@ -26,7 +26,7 @@
 .login-form button {
  margin: 10px 0;
  padding: 10px;
- background: #007bff;
+ background: #587a99;
  color: #fff;
  border: none;
  border-radius: 3px;
@@ -36,7 +36,7 @@
  display: block;
  margin: 10px 0;
  padding: 10px;
- background: #007bff;
+ background: #587a99;
  color: #fff;
  text-align: center;
  text-decoration: none;
@@ -44,10 +44,10 @@
  cursor: pointer;
 }
 .login-form .signup-button:hover {
- background: #0056b3;
+ background: #496b8a;
 }
 .login-form button:hover {
- background: #0056b3;
+ background: #496b8a;
 }
 .register-container {
  min-height: 100vh;
