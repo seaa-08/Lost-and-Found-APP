@@ -1,3 +1,4 @@
+```jsx
 import { useState } from "react";
 import data from "../data.jsx/data.jsx";
 import "../style/style.css";
@@ -13,22 +14,31 @@ const Home = ({ username }) => {
 
     const filteredData = keyword
         ? data.filter((item) =>
-            item.description.toLowerCase().includes(keyword.toLowerCase())
-        )
+              item.description.toLowerCase().includes(keyword.toLowerCase())
+          )
         : data;
 
     return (
         <div className="home">
             <div className="home-intro">
                 <p className="home-eyebrow">SELAMAT DATANG</p>
-                <h2 className="home-title">Halo, {username || "Pengguna"}!</h2>
+
+                <h2 className="home-title">
+                    Halo, {username || "Pengguna"}!
+                </h2>
+
                 <p className="home-description">
-                    Barang hilang, barang ditemukan, kembali ke pemilik.
+                    Barang hilang, Barang ditemukan, Kembali ke pemilik.
                 </p>
             </div>
 
             <form onSubmit={handleSearch} className="search-form">
-                <input type="text" name="search" placeholder="Cari deskripsi barang..." />
+                <input
+                    type="text"
+                    name="search"
+                    placeholder="Cari deskripsi barang..."
+                />
+
                 <button type="submit">Cari</button>
             </form>
 
@@ -36,26 +46,43 @@ const Home = ({ username }) => {
                 <h3>Postingan terbaru</h3>
                 <span>{filteredData.length} postingan</span>
             </div>
+
             <div className="feed">
                 {filteredData.length === 0 ? (
-                    <p className="empty-state">Tidak ada postingan yang cocok.</p>
+                    <p className="empty-state">
+                        Tidak ada postingan yang cocok.
+                    </p>
                 ) : (
                     filteredData.map((item) => (
                         <div key={item.id} className="post-card">
                             <div className="post-header">
-                                <img className="avatar" src={item.profileImage} alt={item.username} />
+                                <img
+                                    className="avatar"
+                                    src={item.profileImage}
+                                    alt={item.username}
+                                />
+
                                 <strong>{item.username}</strong>
                             </div>
 
-                            <img className="post-image" src={item.postImage} alt={item.username} />
+                            <img
+                                className="post-image"
+                                src={item.postImage}
+                                alt={item.description}
+                            />
 
                             <div className="post-actions">
-                                <button>💬</button>
-                                <button>✈</button>
+                                <button type="button" aria-label="Komentar">
+                                    💬
+                                </button>
+
+                                <button type="button" aria-label="Bagikan">
+                                    ✈
+                                </button>
                             </div>
 
                             <div className="post-caption">
-                                <strong>{item.username}</strong>
+                                <strong>{item.username}</strong>{" "}
                                 <span>{item.description}</span>
                             </div>
                         </div>
@@ -67,3 +94,4 @@ const Home = ({ username }) => {
 };
 
 export default Home;
+```
