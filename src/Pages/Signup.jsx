@@ -6,40 +6,87 @@ const Signup = ({ onSignup }) => {
 
   const handleSignup = (event) => {
     event.preventDefault();
-    const name = event.currentTarget.elements.name.value;
-    onSignup(name);
+    const formData = new FormData(event.currentTarget);
+    onSignup(formData.get("username"));
     navigate("/dashboard");
   };
 
   return (
-    <div className="login-container register-container">
-      <div className="login-form register-form">
-        <h2>Daftar</h2>
-        <form onSubmit={handleSignup}>
-          <label htmlFor="name">Nama lengkap</label>
-          <input id="name" name="name" type="text" placeholder="Masukkan nama lengkap" />
+    <main className="auth-page">
+      <section className="auth-card auth-card-signup" aria-label="Sign up">
+        <header className="auth-heading">
+          <h1>Sign up</h1>
+          <p>Buat akun Lost &amp; Found</p>
+        </header>
 
-          <label htmlFor="email">Email</label>
-          <input id="email" type="email" placeholder="nama@email.com" />
+        <form className="auth-form" onSubmit={handleSignup}>
+          <div className="auth-field">
+            <label htmlFor="signup-username">Username</label>
+            <input
+              id="signup-username"
+              name="username"
+              type="text"
+              placeholder="Masukkan username"
+              autoComplete="username"
+              required
+            />
+          </div>
 
-          <label htmlFor="phone">Nomor HP</label>
-          <input id="phone" type="tel" placeholder="08xxxxxxxxxx" />
+          <div className="auth-field">
+            <label htmlFor="signup-email">Email</label>
+            <input
+              id="signup-email"
+              name="email"
+              type="email"
+              placeholder="nama@email.com"
+              autoComplete="email"
+              required
+            />
+          </div>
 
-          <label htmlFor="password">Password</label>
-          <input id="password" type="password" placeholder="Masukkan password" />
+          <div className="auth-field">
+            <label htmlFor="signup-institution">Institution</label>
+            <input
+              id="signup-institution"
+              name="institution"
+              type="text"
+              placeholder="Nama institusi"
+              required
+            />
+          </div>
 
-          <label htmlFor="confirm-password">Konfirmasi password</label>
-          <input
-            id="confirm-password"
-            type="password"
-            placeholder="Ulangi password"
-          />
+          <div className="auth-field">
+            <label htmlFor="signup-city">City</label>
+            <input
+              id="signup-city"
+              name="city"
+              type="text"
+              placeholder="Nama kota"
+              autoComplete="address-level2"
+              required
+            />
+          </div>
 
-          <button type="submit">Daftar</button>
+          <div className="auth-field">
+            <label htmlFor="signup-password">Password</label>
+            <input
+              id="signup-password"
+              name="password"
+              type="password"
+              placeholder="Buat password"
+              autoComplete="new-password"
+              required
+            />
+          </div>
+
+          <button className="auth-submit" type="submit">Sign up</button>
         </form>
-        <p>Sudah punya akun? <Link to="/">Masuk</Link></p>
-      </div>
-    </div>
+
+        <p className="auth-switch">
+          Sudah punya akun? <Link to="/">Login</Link>
+        </p>
+      </section>
+    </main>
   );
 };
 

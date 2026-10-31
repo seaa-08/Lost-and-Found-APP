@@ -1,31 +1,64 @@
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "../style/login-style.css";
-import { useNavigate } from "react-router-dom";
+
 const Login = ({ onLogin }) => {
- const [username, setUsername] = useState("");
- const navigate = useNavigate();
- const handleLogin = (e) => {
- e.preventDefault();
- onLogin(username);
- navigate("/dashboard");
- };
- return (
- <div className="login-container">
- <div className="login-form">
- <h2>Login</h2>
- <form onSubmit={handleLogin}>
- <input
- type="text"
- placeholder="Username"
- value={username}
- onChange={(e) => setUsername(e.target.value)}
- />
- <input type="password" placeholder="Password" />
- <button type="submit">Login</button>
- </form>
- <p>Belum punya akun? <a href="/signup">Daftar</a></p>
- </div>
- </div>
- );
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleLogin = (event) => {
+    event.preventDefault();
+    onLogin(username);
+    navigate("/dashboard");
+  };
+
+  return (
+    <main className="auth-page">
+      <section className="auth-card auth-card-login" aria-label="Login">
+        <header className="auth-heading">
+          <h1>Login</h1>
+          <p>Masuk ke akun Lost &amp; Found Anda</p>
+        </header>
+
+        <form className="auth-form" onSubmit={handleLogin}>
+          <div className="auth-field">
+            <label htmlFor="login-username">Username</label>
+            <input
+              id="login-username"
+              name="username"
+              type="text"
+              placeholder="Masukkan username"
+              autoComplete="username"
+              value={username}
+              onChange={(event) => setUsername(event.target.value)}
+              required
+            />
+          </div>
+
+          <div className="auth-field">
+            <label htmlFor="login-password">Password</label>
+            <input
+              id="login-password"
+              name="password"
+              type="password"
+              placeholder="Masukkan password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              required
+            />
+          </div>
+
+          <button className="auth-submit" type="submit">Login</button>
+        </form>
+
+        <p className="auth-switch">
+          Belum punya akun? <Link to="/signup">Sign up</Link>
+        </p>
+      </section>
+    </main>
+  );
 };
-export default Login
+
+export default Login;

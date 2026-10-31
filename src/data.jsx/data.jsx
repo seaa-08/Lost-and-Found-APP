@@ -18,7 +18,7 @@ const data = [
         username: "Ding0202",
         profileImage: ding,
         postImage: kunci,
-        description: "Found a set of keys near the library. Looking for the owner."
+        description: "Kunci ditemukan di parkiran gedung B."
     }
 ];
 
