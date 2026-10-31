@@ -1,15 +1,25 @@
-```jsx
 import { useState } from "react";
 import data from "../data.jsx/data.jsx";
 import "../style/style.css";
 
 const Home = ({ username }) => {
     const [keyword, setKeyword] = useState("");
+    const [reportCounts, setReportCounts] = useState({});
 
     const handleSearch = (event) => {
         event.preventDefault();
         const value = event.target.search.value.trim();
         setKeyword(value);
+    };
+
+    const handleReport = (postId) => {
+        const confirmed = window.confirm("Yakin ingin melaporkan postingan ini?");
+        if (confirmed) {
+            setReportCounts((counts) => ({
+                ...counts,
+                [postId]: (counts[postId] || 0) + 1,
+            }));
+        }
     };
 
     const filteredData = keyword
@@ -75,9 +85,16 @@ const Home = ({ username }) => {
                                 <button type="button" aria-label="Komentar">
                                     💬
                                 </button>
-
-                                <button type="button" aria-label="Bagikan">
-                                    ✈
+                                <button
+                                    type="button"
+                                    className="post-report"
+                                    onClick={() => handleReport(item.id)}
+                                    aria-label={`Laporkan postingan, ${reportCounts[item.id] || 0} laporan`}
+                                >
+                                    ⚑ <span>Laporkan</span>
+                                    <span className="report-count">
+                                        {reportCounts[item.id] || 0}
+                                    </span>
                                 </button>
                             </div>
 
@@ -92,6 +109,4 @@ const Home = ({ username }) => {
         </div>
     );
 };
-
 export default Home;
-```

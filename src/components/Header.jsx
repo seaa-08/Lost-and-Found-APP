@@ -1,20 +1,29 @@
-import profileImage from "../assets/zzy.jpg";
+import { IconButton } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
 import Logoimg from "../assets/logo.jpeg";
 
-const Header = ({ username }) => (
+const Header = ({ menuOpen, onMenuToggle }) => (
     <>
         <div className="dashboard-brand">
             <img src={Logoimg} alt="" className="dashboard-logo" />
             <span>L&F</span>
         </div>
         <header className="dashboard-header">
-            <div>
+            <div className="dashboard-header-title">
+                <IconButton
+                    className="dashboard-menu-toggle"
+                    onClick={onMenuToggle}
+                    aria-label={menuOpen ? "Sembunyikan menu" : "Tampilkan menu"}
+                    aria-expanded={menuOpen}
+                    aria-controls="dashboard-sidebar"
+                >
+                    {menuOpen ? <CloseIcon /> : <MenuIcon />}
+                </IconButton>
+                <div>
                 <p className="header-eyebrow">LOST & FOUND</p>
                 <h1 id="title">Dashboard</h1>
-            </div>
-            <div className="head-profile">
-                <span>{username || "Pengguna"}</span>
-                <img src={profileImage} alt="" id="profile" />
+                </div>
             </div>
         </header>
     </>

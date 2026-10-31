@@ -1,4 +1,3 @@
-```jsx
 import { useState } from "react";
 import Dashboard from "./components/Dashboard";
 import Home from "./Pages/Home";
@@ -10,13 +9,6 @@ import Account from "./Pages/Account";
 import Setting from "./Pages/Setting";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
-const DashboardPlaceholder = ({ title }) => (
-  <section className="dashboard-placeholder">
-    <p className="home-eyebrow">L&F LOST AND FOUND</p>
-    <h2>{title}</h2>
-  </section>
-);
 
 const App = () => {
   const [username, setUsername] = useState("");
@@ -33,20 +25,20 @@ const App = () => {
 
         <Route
           path="/dashboard"
-          element={<Dashboard username={username} />}
+          element={
+            <Dashboard
+              username={username}
+              onSignOut={() => setUsername("")}
+            />
+          }
         >
           <Route index element={<Home username={username} />} />
-
-          <Route path="post" element={<DashboardPlaceholder title="Post" />} />
-          <Route path="chat" element={<DashboardPlaceholder title="Chat" />} />
-          <Route path="account" element={<DashboardPlaceholder title="Akun" />} />
-
 
           <Route path="post" element={<Post />} />
 
           <Route path="chat" element={<Chat />} />
 
-          <Route path="account" element={<Account />} />
+          <Route path="account" element={<Account username={username} />} />
 
           <Route
             path="setting"
@@ -60,11 +52,6 @@ const App = () => {
         </Route>
       </Routes>
     </BrowserRouter>
-  );
-};
-
-export default App;
-```
   );
 };
 
