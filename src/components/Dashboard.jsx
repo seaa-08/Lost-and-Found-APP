@@ -5,7 +5,7 @@ import Sidebar from "./Sidebar";
 import Footer from "./Footer";
 import "../style/style.css";
 
-const Dashboard = ({ username, onSignOut }) => {
+const Dashboard = ({ username, onSignOut, darkMode }) => {
     const navigate = useNavigate();
     const [menuOpen, setMenuOpen] = useState(
         () => window.matchMedia("(min-width: 761px)").matches
@@ -17,10 +17,13 @@ const Dashboard = ({ username, onSignOut }) => {
     };
 
     return (
-        <div className={`container${menuOpen ? "" : " menu-collapsed"}`}>
+        <div
+            className={`container${menuOpen ? "" : " menu-collapsed"}${darkMode ? " dark-mode" : ""}`}
+        >
             <Header
                 menuOpen={menuOpen}
                 onMenuToggle={() => setMenuOpen((open) => !open)}
+                darkMode={darkMode}
             />
             <Sidebar username={username} onSignOut={handleSignOut} />
             <main className="content">

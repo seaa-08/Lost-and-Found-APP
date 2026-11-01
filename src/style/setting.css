@@ -197,6 +197,48 @@
   outline-offset: 2px;
 }
 
+.dark-mode .settings-page,
+.dark-mode .settings-field{
+  color: #d3deea;
+}
+
+.dark-mode .settings-heading h2,
+.dark-mode .settings-card-heading h3,
+.dark-mode .settings-toggle-row strong{
+  color: #e4edf6;
+}
+
+.dark-mode .settings-intro,
+.dark-mode .settings-card-heading p,
+.dark-mode .settings-toggle-row small{
+  color: #9eafc0;
+}
+
+.dark-mode .settings-card{
+  border-color: #344658;
+  background: #1b2937;
+}
+
+.dark-mode .settings-field input{
+  border-color: #405366;
+  background: #111923;
+  color: #e4edf6;
+}
+
+.dark-mode .settings-field input::placeholder{
+  color: #8293a4;
+}
+
+.dark-mode .settings-toggle-row{
+  border-top-color: #344658;
+}
+
+.dark-mode .settings-success{
+  border-color: #286347;
+  background: #193a2b;
+  color: #a8e4c2;
+}
+
 @media (max-width: 600px) {
   .settings-heading h2 {
     font-size: 23px;

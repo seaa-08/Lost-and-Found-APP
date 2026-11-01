@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Dashboard from "./components/Dashboard";
 import Home from "./Pages/Home";
 import Login from "./Pages/Login";
@@ -12,6 +12,13 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 const App = () => {
   const [username, setUsername] = useState("");
+  const [darkMode, setDarkMode] = useState(
+    () => window.localStorage.getItem("darkMode") === "true"
+  );
+
+  useEffect(() => {
+    window.localStorage.setItem("darkMode", String(darkMode));
+  }, [darkMode]);
 
   return (
     <BrowserRouter>
@@ -29,6 +36,7 @@ const App = () => {
             <Dashboard
               username={username}
               onSignOut={() => setUsername("")}
+              darkMode={darkMode}
             />
           }
         >
@@ -46,6 +54,8 @@ const App = () => {
               <Setting
                 username={username}
                 onUsernameChange={setUsername}
+                darkMode={darkMode}
+                onDarkModeChange={setDarkMode}
               />
             }
           />

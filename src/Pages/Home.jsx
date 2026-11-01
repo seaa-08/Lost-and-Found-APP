@@ -1,15 +1,16 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
 import data from "../data.jsx/data.jsx";
 import "../style/style.css";
 
 const Home = ({ username }) => {
+    const navigate = useNavigate();
     const [keyword, setKeyword] = useState("");
     const [reportCounts, setReportCounts] = useState({});
 
     const handleSearch = (event) => {
         event.preventDefault();
-        const value = event.target.search.value.trim();
-        setKeyword(value);
     };
 
     const handleReport = (postId) => {
@@ -24,33 +25,52 @@ const Home = ({ username }) => {
 
     const filteredData = keyword
         ? data.filter((item) =>
-              item.description.toLowerCase().includes(keyword.toLowerCase())
+              [
+                  item.category,
+                  item.location,
+                  item.characteristics,
+                  item.description,
+              ].some((value) =>
+                  value.toLowerCase().includes(keyword.toLowerCase())
+              )
           )
         : data;
 
     return (
         <div className="home">
-            <div className="home-intro">
-                <p className="home-eyebrow">SELAMAT DATANG</p>
-
-                <h2 className="home-title">
-                    Halo, {username || "Pengguna"}!
-                </h2>
-
-                <p className="home-description">
-                    Barang hilang, Barang ditemukan, Kembali ke pemilik.
-                </p>
-            </div>
-
-            <form onSubmit={handleSearch} className="search-form">
+            <form onSubmit={handleSearch} className="search-form" role="search">
                 <input
-                    type="text"
+                    type="search"
                     name="search"
+                    aria-label="Cari postingan"
                     placeholder="Cari deskripsi barang..."
+                    value={keyword}
+                    onChange={(event) => setKeyword(event.target.value)}
                 />
 
                 <button type="submit">Cari</button>
             </form>
+
+            <div className="home-intro">
+                <p className="home-eyebrow">SELAMAT DATANG</p>
+
+                <h2 className="home-title">
+                    Halo, {username || "Pengguna"}! Temukan barangmu.
+                </h2>
+
+                <p className="home-description">
+                    Cari barang yang hilang atau bantu pemilik menemukan
+                    barangnya kembali dengan membagikan barang temuanmu.
+                </p>
+
+                <button
+                    className="home-post-button"
+                    type="button"
+                    onClick={() => navigate("/dashboard/post")}
+                >
+                    Buat Postingan
+                </button>
+            </div>
 
             <div className="feed-heading">
                 <h3>Postingan terbaru</h3>
@@ -75,15 +95,37 @@ const Home = ({ username }) => {
                                 <strong>{item.username}</strong>
                             </div>
 
-                            <img
-                                className="post-image"
-                                src={item.postImage}
-                                alt={item.description}
-                            />
+                            <div className="post-image-wrap">
+                                <img
+                                    className="post-image"
+                                    src={item.postImage}
+                                    alt={item.description}
+                                />
+                                <span
+                                    className={`post-status post-status-${item.status}`}
+                                >
+                                    {item.status === "lost" ? "LOST" : "FOUND"}
+                                </span>
+                            </div>
+
+                            <dl className="post-details">
+                                <div className="post-detail">
+                                    <dt>Kategori</dt>
+                                    <dd>{item.category}</dd>
+                                </div>
+                                <div className="post-detail">
+                                    <dt>Lokasi</dt>
+                                    <dd>{item.location}</dd>
+                                </div>
+                                <div className="post-detail">
+                                    <dt>Ciri-ciri</dt>
+                                    <dd>{item.characteristics}</dd>
+                                </div>
+                            </dl>
 
                             <div className="post-actions">
-                                <button type="button" aria-label="Komentar">
-                                    💬
+                                <button type="button" aria-label="Chat">
+                                    <ChatBubbleOutlineOutlinedIcon fontSize="small" />
                                 </button>
                                 <button
                                     type="button"
@@ -98,10 +140,16 @@ const Home = ({ username }) => {
                                 </button>
                             </div>
 
-                            <div className="post-caption">
-                                <strong>{item.username}</strong>{" "}
-                                <span>{item.description}</span>
-                            </div>
+                            {!(
+                                item.category &&
+                                item.location &&
+                                item.characteristics
+                            ) && (
+                                <div className="post-caption">
+                                    <strong>{item.username}</strong>{" "}
+                                    <span>{item.description}</span>
+                                </div>
+                            )}
                         </div>
                     ))
                 )}

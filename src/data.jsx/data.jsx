@@ -11,14 +11,22 @@ const data = [
         username: "Zayn0416",
         profileImage: zzy,
         postImage: dompet,
-        description: "Berwarna kuning. Lokasi terakhir terlihat di kantin kampus. Mohon hubungi jika menemukan."
+        status: "lost",
+        category: "Dompet",
+        location: "Kantin kampus",
+        characteristics: "Dompet kecil berwarna kuning dengan gantungan karakter.",
+        description: "Dompet hilang. Mohon hubungi jika menemukannya."
     },
     {
         id: 2,
         username: "Ding0202",
         profileImage: ding,
         postImage: kunci,
-        description: "Kunci ditemukan di parkiran gedung B."
+        status: "found",
+        category: "Kunci",
+        location: "Parkiran gedung B",
+        characteristics: "Seikat kunci logam dengan ring gantungan.",
+        description: "Kunci ditemukan. Mohon hubungi pemiliknya."
     }
 ];
 
