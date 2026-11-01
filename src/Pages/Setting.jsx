@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "../style/setting.css";
 
-const Setting = ({ username, onUsernameChange }) => {
+const Setting = ({ username, onUsernameChange, darkMode, onDarkModeChange }) => {
   const [saved, setSaved] = useState(false);
   const [preferences, setPreferences] = useState({
     itemNotifications: false,
@@ -24,6 +24,11 @@ const Setting = ({ username, onUsernameChange }) => {
   const handlePreferenceChange = (event) => {
     const { name, checked } = event.target;
     setPreferences((current) => ({ ...current, [name]: checked }));
+    setSaved(false);
+  };
+
+  const handleDarkModeChange = (event) => {
+    onDarkModeChange(event.target.checked);
     setSaved(false);
   };
 
@@ -100,6 +105,28 @@ const Setting = ({ username, onUsernameChange }) => {
               />
             </label>
           </div>
+        </section>
+
+        <section className="settings-card">
+          <div className="settings-card-heading">
+            <div>
+              <h3>Tampilan</h3>
+              <p>Sesuaikan tampilan aplikasi.</p>
+            </div>
+          </div>
+
+          <label className="settings-toggle-row">
+            <span>
+              <strong>Mode gelap</strong>
+              <small>Gunakan tampilan gelap pada dashboard.</small>
+            </span>
+            <input
+              type="checkbox"
+              name="darkMode"
+              checked={darkMode}
+              onChange={handleDarkModeChange}
+            />
+          </label>
         </section>
 
         <section className="settings-card">
