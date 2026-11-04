@@ -1,154 +1,111 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
+import React, { useState, useEffect } from "react";
 import data from "../data.jsx/data.jsx";
 import "../style/style.css";
 
-const Home = ({ username }) => {
-    const navigate = useNavigate();
+const Home = () => {
     const [keyword, setKeyword] = useState("");
-    const [reportCounts, setReportCounts] = useState({});
+    const [allPosts, setAllPosts] = useState([]);
+
+    useEffect(() => {
+        const savedPosts = JSON.parse(localStorage.getItem('lost_and_found_posts')) || [];
+        
+        const formattedSavedPosts = savedPosts.map(post => ({
+            id: post.id,
+            username: post.username || "Pengguna",
+            profileImage: "https://via.placeholder.com/40", 
+            postImage: post.image || "", 
+            title: post.title,
+            status: post.type === 'lost' ? 'HILANG' : 'TEMUAN',
+            location: post.location,
+            contact: post.contact,
+            description: post.description,
+            isUserPost: true 
+        }));
+
+        setAllPosts([...formattedSavedPosts, ...data]);
+    }, []);
+
+    const handleDelete = (id) => {
+        const updatedPosts = allPosts.filter((item) => item.id !== id);
+        setAllPosts(updatedPosts);
+        
+        const currentSaved = JSON.parse(localStorage.getItem('lost_and_found_posts')) || [];
+        localStorage.setItem('lost_and_found_posts', JSON.stringify(currentSaved.filter(item => item.id !== id)));
+    };
 
     const handleSearch = (event) => {
         event.preventDefault();
-    };
-
-    const handleReport = (postId) => {
-        const confirmed = window.confirm("Yakin ingin melaporkan postingan ini?");
-        if (confirmed) {
-            setReportCounts((counts) => ({
-                ...counts,
-                [postId]: (counts[postId] || 0) + 1,
-            }));
-        }
+        const value = event.target.search.value.trim();
+        setKeyword(value);
     };
 
     const filteredData = keyword
-        ? data.filter((item) =>
-              [
-                  item.category,
-                  item.location,
-                  item.characteristics,
-                  item.description,
-              ].some((value) =>
-                  value.toLowerCase().includes(keyword.toLowerCase())
-              )
-          )
-        : data;
+        ? allPosts.filter((item) => {
+            const desc = item.description ? String(item.description).toLowerCase() : "";
+            const title = item.title ? String(item.title).toLowerCase() : "";
+            const username = item.username ? String(item.username).toLowerCase() : "";
+            const query = keyword.toLowerCase();
+
+            return desc.includes(query) || title.includes(query) || username.includes(query);
+          })
+        : allPosts;
 
     return (
         <div className="home">
-            <form onSubmit={handleSearch} className="search-form" role="search">
-                <input
-                    type="search"
-                    name="search"
-                    aria-label="Cari postingan"
-                    placeholder="Cari deskripsi barang..."
-                    value={keyword}
-                    onChange={(event) => setKeyword(event.target.value)}
-                />
+            <p>Temukan barang yang hilang atau laporkan barang yang ditemukan.</p>
 
+            <form onSubmit={handleSearch} className="search-form">
+                <input type="text" name="search" placeholder="Cari deskripsi / nama barang..." />
                 <button type="submit">Cari</button>
             </form>
 
-            <div className="home-intro">
-                <p className="home-eyebrow">SELAMAT DATANG</p>
-
-                <h2 className="home-title">
-                    Halo, {username || "Pengguna"}! Temukan barangmu.
-                </h2>
-
-                <p className="home-description">
-                    Cari barang yang hilang atau bantu pemilik menemukan
-                    barangnya kembali dengan membagikan barang temuanmu.
-                </p>
-
-                <button
-                    className="home-post-button"
-                    type="button"
-                    onClick={() => navigate("/dashboard/post")}
-                >
-                    Buat Postingan
-                </button>
-            </div>
-
-            <div className="feed-heading">
-                <h3>Postingan terbaru</h3>
-                <span>{filteredData.length} postingan</span>
-            </div>
-
             <div className="feed">
                 {filteredData.length === 0 ? (
-                    <p className="empty-state">
-                        Tidak ada postingan yang cocok.
-                    </p>
+                    <p className="empty-state">Tidak ada postingan yang cocok.</p>
                 ) : (
                     filteredData.map((item) => (
                         <div key={item.id} className="post-card">
                             <div className="post-header">
-                                <img
-                                    className="avatar"
-                                    src={item.profileImage}
-                                    alt={item.username}
-                                />
-
+                                <img className="avatar" src={item.profileImage} alt={item.username} />
                                 <strong>{item.username}</strong>
                             </div>
 
-                            <div className="post-image-wrap">
-                                <img
-                                    className="post-image"
-                                    src={item.postImage}
-                                    alt={item.description}
-                                />
-                                <span
-                                    className={`post-status post-status-${item.status}`}
-                                >
-                                    {item.status === "lost" ? "LOST" : "FOUND"}
-                                </span>
-                            </div>
-
-                            <dl className="post-details">
-                                <div className="post-detail">
-                                    <dt>Kategori</dt>
-                                    <dd>{item.category}</dd>
-                                </div>
-                                <div className="post-detail">
-                                    <dt>Lokasi</dt>
-                                    <dd>{item.location}</dd>
-                                </div>
-                                <div className="post-detail">
-                                    <dt>Ciri-ciri</dt>
-                                    <dd>{item.characteristics}</dd>
-                                </div>
-                            </dl>
+                            {item.postImage && (
+                                <img className="post-image" src={item.postImage} alt={item.username} />
+                            )}
 
                             <div className="post-actions">
-                                <button type="button" aria-label="Chat">
-                                    <ChatBubbleOutlineOutlinedIcon fontSize="small" />
-                                </button>
-                                <button
-                                    type="button"
-                                    className="post-report"
-                                    onClick={() => handleReport(item.id)}
-                                    aria-label={`Laporkan postingan, ${reportCounts[item.id] || 0} laporan`}
-                                >
-                                    ⚑ <span>Laporkan</span>
-                                    <span className="report-count">
-                                        {reportCounts[item.id] || 0}
-                                    </span>
-                                </button>
+                                <button>💬</button>
+                                <button>✈️</button>
                             </div>
 
-                            {!(
-                                item.category &&
-                                item.location &&
-                                item.characteristics
-                            ) && (
-                                <div className="post-caption">
-                                    <strong>{item.username}</strong>{" "}
-                                    <span>{item.description}</span>
-                                </div>
+                            <div className="post-caption" style={{ padding: '0 15px' }}>
+                                <p style={{ margin: '5px 0', fontSize: '14px' }}>
+                                    <span style={{ 
+                                        padding: '2px 6px', 
+                                        borderRadius: '4px', 
+                                        color: 'white', 
+                                        fontSize: '11px', 
+                                        fontWeight: 'bold',
+                                        background: item.status === 'HILANG' ? '#d9534f' : '#5cb85c',
+                                        marginRight: '8px'
+                                    }}>
+                                        {item.status || 'INFO'}
+                                    </span>
+                                    <strong>{item.title || item.username}</strong>
+                                </p>
+                                <p style={{ margin: '4px 0', fontSize: '13px', color: '#444' }}>{item.description}</p>
+                                {item.location && <p style={{ margin: '2px 0', fontSize: '12px', color: '#666' }}>📍 Lokasi: {item.location}</p>}
+                                {item.contact && <p style={{ margin: '2px 0', fontSize: '12px', color: '#666' }}>📞 Kontak: {item.contact}</p>}
+                            </div>
+
+                            {item.isUserPost && (
+                                <button 
+                                    onClick={() => handleDelete(item.id)} 
+                                    style={{ marginTop: '12px', marginLeft: '15px', marginBottom: '15px', padding: '6px 12px', background: '#dc3545', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '13px' }}
+                                >
+                                    Hapus Postingan
+                                </button>
                             )}
                         </div>
                     ))
@@ -157,4 +114,5 @@ const Home = ({ username }) => {
         </div>
     );
 };
+
 export default Home;

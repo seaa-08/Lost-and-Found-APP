@@ -42,7 +42,7 @@ const App = () => {
         >
           <Route index element={<Home username={username} />} />
 
-          <Route path="post" element={<Post />} />
+          <Route path="post" element={<Post username={username} />} />
 
           <Route path="chat" element={<Chat />} />
 
