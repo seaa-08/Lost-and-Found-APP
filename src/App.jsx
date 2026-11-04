@@ -7,11 +7,13 @@ import Post from "./Pages/Post";
 import Chat from "./Pages/Chat";
 import Account from "./Pages/Account";
 import Setting from "./Pages/Setting";
+import RequireAuth from "./components/RequireAuth";
+import { getCurrentUser, updateCurrentUser } from "./auth/authStore";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 const App = () => {
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState(() => getCurrentUser()?.username || "");
   const [darkMode, setDarkMode] = useState(
     () => window.localStorage.getItem("darkMode") === "true"
   );
@@ -33,11 +35,13 @@ const App = () => {
         <Route
           path="/dashboard"
           element={
-            <Dashboard
-              username={username}
-              onSignOut={() => setUsername("")}
-              darkMode={darkMode}
-            />
+            <RequireAuth>
+              <Dashboard
+                username={username}
+                onSignOut={() => setUsername("")}
+                darkMode={darkMode}
+              />
+            </RequireAuth>
           }
         >
           <Route index element={<Home username={username} />} />
@@ -53,7 +57,10 @@ const App = () => {
             element={
               <Setting
                 username={username}
-                onUsernameChange={setUsername}
+                onUsernameChange={(name) => {
+                  updateCurrentUser({ username: name });
+                  setUsername(name);
+                }}
                 darkMode={darkMode}
                 onDarkModeChange={setDarkMode}
               />

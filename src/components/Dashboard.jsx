@@ -4,6 +4,8 @@ import Header from "./Header";
 import Sidebar from "./Sidebar";
 import Footer from "./Footer";
 import "../style/style.css";
+import LogoutNotice from "./LogoutNotice";
+import { deleteCurrentAccount } from "../auth/authStore";
 
 const Dashboard = ({ username, onSignOut, darkMode }) => {
     const navigate = useNavigate();
@@ -11,7 +13,13 @@ const Dashboard = ({ username, onSignOut, darkMode }) => {
         () => window.matchMedia("(min-width: 761px)").matches
     );
 
-    const handleSignOut = () => {
+    const [showLogoutNotice, setShowLogoutNotice] = useState(false);
+
+    const handleSignOut = () => setShowLogoutNotice(true);
+
+    const confirmSignOut = () => {
+        setShowLogoutNotice(false);
+        deleteCurrentAccount();
         onSignOut();
         navigate("/");
     };
@@ -30,6 +38,12 @@ const Dashboard = ({ username, onSignOut, darkMode }) => {
                 <Outlet />
             </main>
             <Footer />
+            <LogoutNotice
+                open={showLogoutNotice}
+                darkMode={darkMode}
+                onConfirm={confirmSignOut}
+                onCancel={() => setShowLogoutNotice(false)}
+            />
         </div>
     );
 };

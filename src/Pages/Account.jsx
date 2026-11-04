@@ -1,10 +1,12 @@
 import profileImage from "../assets/zzy.jpg";
 import "../style/style.css";
+import UserAvatar from "../components/UserAvatar";
+import AccountDetails from "../components/AccountDetails";
 
 const Account = ({ username }) => (
     <section className="profile-page">
         <div className="profile-card">
-            <img className="profile-page-avatar" src={profileImage} alt="" />
+            <UserAvatar className="profile-page-avatar" fallback={profileImage} />
             <div>
                 <p className="home-eyebrow">PROFIL PENGGUNA</p>
                 <h2>{username || "Pengguna"}</h2>
@@ -13,6 +15,7 @@ const Account = ({ username }) => (
                 </p>
             </div>
         </div>
+        <AccountDetails />
     </section>
 );
 

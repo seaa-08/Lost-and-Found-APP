@@ -1,0 +1,299 @@
+/* ---------- warna tema (mode terang, sama dengan dashboard) ---------- */
+.lamp-scene {
+  --scene-off: #cfdce8;
+  --scene-on: radial-gradient(circle at 30% 45%, #f5fbff 0%, #e3f1fc 70%);
+  --lamp-shade-off: #8da2b5;
+  --lamp-shade-on: #64b5f6;
+  --lamp-rim-off: #7b8fa2;
+  --lamp-rim-on: #fffbe6;
+  --lamp-metal-off: #9fb1c1;
+  --lamp-metal-on: #6f8aa3;
+  --lamp-cord: #6f8aa3;
+  --lamp-face: #263d52;
+  --lamp-beam: #64b5f6;
+  --lamp-beam-alpha: 0.4;
+  --lamp-hint: #60778c;
+  --glow-1: rgb(100 181 246 / 55%);
+  --glow-2: rgb(100 181 246 / 28%);
+  --glow-1-high: rgb(100 181 246 / 75%);
+  --glow-2-high: rgb(100 181 246 / 40%);
+}
+
+/* ---------- warna tema (dark mode dashboard) ---------- */
+.lamp-scene.lamp-dark {
+  --scene-off: #0d141c;
+  --scene-on: radial-gradient(circle at 30% 45%, #1b2937 0%, #111923 70%);
+  --lamp-shade-off: #26323f;
+  --lamp-shade-on: #64b5f6;
+  --lamp-rim-off: #1a232d;
+  --lamp-rim-on: #fff6cf;
+  --lamp-metal-off: #3a4756;
+  --lamp-metal-on: #cfd8e2;
+  --lamp-cord: #d9dde2;
+  --lamp-face: #0e1114;
+  --lamp-beam: #fff3c4;
+  --lamp-beam-alpha: 0.45;
+  --lamp-hint: #9eafc0;
+}
+
+.lamp-scene {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(16px, 5vw, 64px);
+  padding: 24px;
+  overflow-y: auto;
+  background: var(--scene-off);
+}
+
+.lamp-scene::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: var(--scene-on);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+
+.lamp-scene.is-on::before {
+  opacity: 1;
+}
+
+/* ---------- lampu ---------- */
+.lamp-side {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin: auto 0;
+}
+
+.lamp-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lamp-button:focus-visible {
+  outline: 3px solid #42a5f5;
+  outline-offset: 6px;
+  border-radius: 12px;
+}
+
+.lamp-svg {
+  display: block;
+  width: clamp(150px, 24vw, 280px);
+  height: auto;
+  overflow: visible;
+}
+
+.lamp-shade {
+  fill: var(--lamp-shade-off);
+  transition: fill 0.5s ease;
+}
+
+.lamp-rim {
+  fill: var(--lamp-rim-off);
+  transition: fill 0.5s ease;
+}
+
+.lamp-metal {
+  fill: var(--lamp-metal-off);
+  transition: fill 0.5s ease;
+}
+
+.beam-stop-start {
+  stop-color: var(--lamp-beam);
+  stop-opacity: var(--lamp-beam-alpha);
+}
+
+.beam-stop-end {
+  stop-color: var(--lamp-beam);
+  stop-opacity: 0;
+}
+
+.lamp-beam {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.lamp-cord {
+  color: var(--lamp-cord);
+  transition: transform 0.2s ease;
+}
+
+.lamp-cord.is-pulled {
+  transform: translateY(14px);
+}
+
+.lamp-eye {
+  stroke: var(--lamp-face);
+  transition: opacity 0.3s ease;
+}
+
+.lamp-eye-on,
+.lamp-mouth {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.lamp-hint {
+  margin: 0;
+  color: var(--lamp-hint);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  text-align: center;
+}
+
+/* lampu menyala */
+.is-on .lamp-shade {
+  fill: var(--lamp-shade-on);
+}
+
+.is-on .lamp-rim {
+  fill: var(--lamp-rim-on);
+}
+
+.is-on .lamp-metal {
+  fill: var(--lamp-metal-on);
+}
+
+.is-on .lamp-beam {
+  opacity: 1;
+}
+
+.is-on .lamp-eye-off {
+  opacity: 0;
+}
+
+.is-on .lamp-eye-on,
+.is-on .lamp-mouth {
+  opacity: 1;
+}
+
+/* ---------- form ---------- */
+.lamp-form {
+  position: relative;
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 520px;
+  margin: auto 0;
+  display: flex;
+  justify-content: center;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(24px) scale(0.96);
+  filter: blur(6px);
+  transition:
+    opacity 0.6s ease 0.25s,
+    transform 0.6s ease 0.25s,
+    filter 0.6s ease 0.25s,
+    visibility 0s linear 0.85s;
+}
+
+.is-on .lamp-form {
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+  filter: none;
+  transition:
+    opacity 0.6s ease 0.25s,
+    transform 0.6s ease 0.25s,
+    filter 0.6s ease 0.25s,
+    visibility 0s;
+}
+
+/* glow biru di kartu (mode terang & gelap) */
+.auth-page .lamp-scene.is-on .auth-card {
+  border-color: #64b5f6;
+  animation: lamp-glow 3s ease-in-out infinite;
+}
+
+@keyframes lamp-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 24px var(--glow-1), 0 0 70px var(--glow-2);
+  }
+  50% {
+    box-shadow: 0 0 34px var(--glow-1-high), 0 0 90px var(--glow-2-high);
+  }
+}
+
+/* ---------- kartu saat dark mode (sama dengan dashboard) ---------- */
+.auth-page .lamp-scene.lamp-dark .auth-card {
+  border-color: #344658;
+  background: #1b2937;
+}
+
+.auth-page .lamp-scene.lamp-dark .auth-card .auth-heading h1 {
+  color: #64b5f6;
+}
+
+.auth-page .lamp-scene.lamp-dark .auth-card .auth-heading p {
+  color: #9eafc0;
+}
+
+.auth-page .lamp-scene.lamp-dark .auth-card .auth-logo {
+  border-color: #344658;
+}
+
+.auth-page .lamp-scene.lamp-dark .auth-card .auth-field label {
+  color: #d3deea;
+}
+
+.auth-page .lamp-scene.lamp-dark .auth-card .auth-field input {
+  border-color: #405366;
+  background: #111923;
+  color: #e4edf6;
+}
+
+.auth-page .lamp-scene.lamp-dark .auth-card .auth-field input::placeholder {
+  color: #6f8296;
+}
+
+.auth-page .lamp-scene.lamp-dark .auth-card .auth-switch {
+  color: #9eafc0;
+}
+
+.auth-page .lamp-scene.lamp-dark .auth-card .auth-switch a {
+  color: #64b5f6;
+}
+
+.auth-page .lamp-scene.lamp-dark .auth-demo-credentials {
+  color: #9eafc0;
+}
+
+.auth-page .lamp-scene.lamp-dark .auth-demo-credentials strong {
+  color: #64b5f6;
+}
+
+/* HP */
+@media (max-width: 760px) {
+  .lamp-scene {
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+  }
+
+  .lamp-svg {
+    width: clamp(110px, 34vw, 160px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lamp-scene *,
+  .lamp-form,
+  .lamp-scene::before {
+    transition-duration: 0.01s !important;
+    animation: none !important;
+  }
+}
