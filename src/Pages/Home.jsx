@@ -1,160 +1,179 @@
 import { useState } from "react";
+import Button from "@mui/material/Button";
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
 import { useNavigate } from "react-router-dom";
-import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
+import Report from "../components/Report";
 import data from "../data.jsx/data.jsx";
 import "../style/style.css";
 
+const getInitialPosts = () => {
+    const savedPosts = JSON.parse(localStorage.getItem("lost_and_found_posts")) || [];
+    const formattedSavedPosts = savedPosts.map((post) => ({
+        id: post.id,
+        username: post.username || "Pengguna",
+        profileImage: "https://via.placeholder.com/40",
+        postImage: post.image || "",
+        title: post.title,
+        category: post.category,
+        status: post.type === "lost" ? "HILANG" : "TEMUAN",
+        location: post.location,
+        date: post.date,
+        contact: post.contact,
+        description: post.description,
+        characteristics: post.characteristics,
+        isUserPost: true,
+    }));
+
+    return [...formattedSavedPosts, ...data];
+};
+
 const Home = ({ username }) => {
-    const navigate = useNavigate();
     const [keyword, setKeyword] = useState("");
-    const [reportCounts, setReportCounts] = useState({});
+    const [allPosts, setAllPosts] = useState(getInitialPosts);
+    const navigate = useNavigate();
+
+    const handleDelete = (id) => {
+        const updatedPosts = allPosts.filter((item) => item.id !== id);
+        setAllPosts(updatedPosts);
+        
+        const currentSaved = JSON.parse(localStorage.getItem('lost_and_found_posts')) || [];
+        localStorage.setItem('lost_and_found_posts', JSON.stringify(currentSaved.filter(item => item.id !== id)));
+    };
 
     const handleSearch = (event) => {
         event.preventDefault();
-    };
-
-    const handleReport = (postId) => {
-        const confirmed = window.confirm("Yakin ingin melaporkan postingan ini?");
-        if (confirmed) {
-            setReportCounts((counts) => ({
-                ...counts,
-                [postId]: (counts[postId] || 0) + 1,
-            }));
-        }
+        const value = event.target.search.value.trim();
+        setKeyword(value);
     };
 
     const filteredData = keyword
-        ? data.filter((item) =>
-              [
-                  item.category,
-                  item.location,
-                  item.characteristics,
-                  item.description,
-              ].some((value) =>
-                  value.toLowerCase().includes(keyword.toLowerCase())
-              )
-          )
-        : data;
+        ? allPosts.filter((item) => {
+            const desc = item.description ? String(item.description).toLowerCase() : "";
+            const title = item.title ? String(item.title).toLowerCase() : "";
+            const username = item.username ? String(item.username).toLowerCase() : "";
+            const query = keyword.toLowerCase();
+
+            return desc.includes(query) || title.includes(query) || username.includes(query);
+          })
+        : allPosts;
 
     return (
         <div className="home">
-            <form onSubmit={handleSearch} className="search-form" role="search">
-                <input
-                    type="search"
-                    name="search"
-                    aria-label="Cari postingan"
-                    placeholder="Cari deskripsi barang..."
-                    value={keyword}
-                    onChange={(event) => setKeyword(event.target.value)}
-                />
+            <p>Temukan barang yang hilang atau laporkan barang yang ditemukan.</p>
 
-                <button type="submit">Cari</button>
+            <form onSubmit={handleSearch} className="search-form">
+                <input type="text" name="search" placeholder="Cari deskripsi / nama barang..." />
+                <Button type="submit" variant="contained" disableElevation className="search-submit-button">
+                    Cari
+                </Button>
             </form>
-
-            <div className="home-intro">
-                <p className="home-eyebrow">SELAMAT DATANG</p>
-
-                <h2 className="home-title">
-                    Halo, {username || "Pengguna"}! Temukan barangmu.
-                </h2>
-
-                <p className="home-description">
-                    Cari barang yang hilang atau bantu pemilik menemukan
-                    barangnya kembali dengan membagikan barang temuanmu.
-                </p>
-
-                <button
-                    className="home-post-button"
-                    type="button"
-                    onClick={() => navigate("/dashboard/post")}
-                >
-                    Buat Postingan
-                </button>
-            </div>
-
-            <div className="feed-heading">
-                <h3>Postingan terbaru</h3>
-                <span>{filteredData.length} postingan</span>
-            </div>
 
             <div className="feed">
                 {filteredData.length === 0 ? (
-                    <p className="empty-state">
-                        Tidak ada postingan yang cocok.
-                    </p>
+                    <p className="empty-state">Tidak ada postingan yang cocok.</p>
                 ) : (
-                    filteredData.map((item) => (
-                        <div key={item.id} className="post-card">
-                            <div className="post-header">
-                                <img
-                                    className="avatar"
-                                    src={item.profileImage}
-                                    alt={item.username}
-                                />
+                    filteredData.map((item) => {
+                        const isLost = ["lost", "hilang"].includes(
+                            String(item.status || item.type || "").toLowerCase()
+                        );
 
+                        return (
+                        <div key={item.id} className="post-card">
+                            <span className={`post-status ${isLost ? "post-status-lost" : "post-status-found"}`}>
+                                {isLost ? "LOST" : "FOUND"}
+                            </span>
+                            <div className="post-header">
+                                <img className="avatar" src={item.profileImage} alt={item.username} />
                                 <strong>{item.username}</strong>
                             </div>
 
-                            <div className="post-image-wrap">
-                                <img
-                                    className="post-image"
-                                    src={item.postImage}
-                                    alt={item.description}
-                                />
-                                <span
-                                    className={`post-status post-status-${item.status}`}
+                            {item.postImage && (
+                                <img className="post-image" src={item.postImage} alt={item.username} />
+                            )}
+
+                            <div className="post-actions">
+                                <Button
+                                    type="button"
+                                    variant="text"
+                                    className="post-comment-button"
+                                    aria-label={`Chat dengan ${item.username}`}
+                                    title={item.username === username ? "Ini postingan Anda" : `Chat dengan ${item.username}`}
+                                    disabled={item.username === username}
+                                    onClick={() => navigate(`/dashboard/chat/${item.id}`)}
                                 >
-                                    {item.status === "lost" ? "LOST" : "FOUND"}
-                                </span>
+                                    <ChatBubbleOutlineIcon fontSize="small" />
+                                </Button>
+                                <Report postId={item.id} username={username} />
+                            </div>
+
+                            <div className="post-caption">
+                                <p className="post-caption-title">
+                                    <strong>{item.title || item.username}</strong>
+                                </p>
+                                {item.description && (
+                                    <p className="post-caption-description">
+                                        {item.description}
+                                    </p>
+                                )}
                             </div>
 
                             <dl className="post-details">
-                                <div className="post-detail">
-                                    <dt>Kategori</dt>
-                                    <dd>{item.category}</dd>
-                                </div>
-                                <div className="post-detail">
-                                    <dt>Lokasi</dt>
-                                    <dd>{item.location}</dd>
-                                </div>
-                                <div className="post-detail">
-                                    <dt>Ciri-ciri</dt>
-                                    <dd>{item.characteristics}</dd>
-                                </div>
+                                {item.category && (
+                                    <div className="post-detail">
+                                        <dt>Kategori</dt>
+                                        <dd>{item.category}</dd>
+                                    </div>
+                                )}
+                                {item.location && (
+                                    <div className="post-detail">
+                                        <dt>Lokasi</dt>
+                                        <dd>{item.location}</dd>
+                                    </div>
+                                )}
+                                {item.date && (
+                                    <div className="post-detail">
+                                        <dt>Tanggal</dt>
+                                        <dd>{item.date}</dd>
+                                    </div>
+                                )}
+                                {item.characteristics && (
+                                    <div className="post-detail">
+                                        <dt>Ciri-ciri</dt>
+                                        <dd>{item.characteristics}</dd>
+                                    </div>
+                                )}
+                                {item.contact && (
+                                    <div className="post-detail">
+                                        <dt>Kontak</dt>
+                                        <dd>{item.contact}</dd>
+                                    </div>
+                                )}
                             </dl>
 
-                            <div className="post-actions">
-                                <button type="button" aria-label="Chat">
-                                    <ChatBubbleOutlineOutlinedIcon fontSize="small" />
-                                </button>
-                                <button
+                            {item.isUserPost && (
+                                <Button
                                     type="button"
-                                    className="post-report"
-                                    onClick={() => handleReport(item.id)}
-                                    aria-label={`Laporkan postingan, ${reportCounts[item.id] || 0} laporan`}
+                                    variant="contained"
+                                    color="error"
+                                    disableElevation
+                                    onClick={() => handleDelete(item.id)}
+                                    sx={{
+                                        mt: 1.5,
+                                        ml: 1.875,
+                                        mb: 1.875,
+                                        textTransform: "none",
+                                    }}
                                 >
-                                    ⚑ <span>Laporkan</span>
-                                    <span className="report-count">
-                                        {reportCounts[item.id] || 0}
-                                    </span>
-                                </button>
-                            </div>
-
-                            {!(
-                                item.category &&
-                                item.location &&
-                                item.characteristics
-                            ) && (
-                                <div className="post-caption">
-                                    <strong>{item.username}</strong>{" "}
-                                    <span>{item.description}</span>
-                                </div>
+                                    Hapus Postingan
+                                </Button>
                             )}
                         </div>
-                    ))
+                        );
+                    })
                 )}
             </div>
         </div>
     );
 };
+
 export default Home;

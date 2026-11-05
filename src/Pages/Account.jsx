@@ -1,4 +1,4 @@
-import profileImage from "../assets/zzy.jpg";
+import profileImage from "../assets/profil.jpg";
 import "../style/style.css";
 import UserAvatar from "../components/UserAvatar";
 import AccountDetails from "../components/AccountDetails";
@@ -8,7 +8,7 @@ const Account = ({ username }) => (
         <div className="profile-card">
             <UserAvatar className="profile-page-avatar" fallback={profileImage} />
             <div>
-                <p className="home-eyebrow">PROFIL PENGGUNA</p>
+                <p className="home-eyebrow">PROFIL {(username || "PENGGUNA").toUpperCase()}</p>
                 <h2>{username || "Pengguna"}</h2>
                 <p className="profile-page-description">
                     Profil akun Lost &amp; Found

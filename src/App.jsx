@@ -7,48 +7,30 @@ import Post from "./Pages/Post";
 import Chat from "./Pages/Chat";
 import Account from "./Pages/Account";
 import Setting from "./Pages/Setting";
+import NotFound from "./Pages/NotFound";
+
 import RequireAuth from "./components/RequireAuth";
 import { getCurrentUser, updateCurrentUser } from "./auth/authStore";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 const App = () => {
-  const [username, setUsername] = useState(() => getCurrentUser()?.username || "");
-  const [darkMode, setDarkMode] = useState(
-    () => window.localStorage.getItem("darkMode") === "true"
+  const [username, setUsername] = useState(
+    () => window.localStorage.getItem("username") || ""
   );
-
-  useEffect(() => {
-    window.localStorage.setItem("darkMode", String(darkMode));
-  }, [darkMode]);
-
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Login onLogin={setUsername} />} />
-
-        <Route
-          path="/signup"
-          element={<Signup onSignup={setUsername} />}
-        />
-
-        <Route
-          path="/dashboard"
-          element={
-            <RequireAuth>
-              <Dashboard
-                username={username}
-                onSignOut={() => setUsername("")}
-                darkMode={darkMode}
-              />
-            </RequireAuth>
+          <Dashboard
+            username={username}
+            onSignOut={() => setUsername("")}
+            darkMode={darkMode}
+          />
           }
         >
-          <Route index element={<Home username={username} />} />
+          <Route index element={<Home username={username} doneChats={doneChats}/>} />
 
-          <Route path="post" element={<Post />} />
+          <Route path="post" element={<Post username={username} />} />
 
-          <Route path="chat" element={<Chat />} />
+          <Route path="chat" element={<Chat username={username} doneChats={doneChats} onDone={handleDone}/>} />
+          <Route path="chat/:userId" element={<Chat username={username} doneChats={doneChats} onDone={handleDone}/>}/>
 
           <Route path="account" element={<Account username={username} />} />
 
@@ -67,6 +49,8 @@ const App = () => {
             }
           />
         </Route>
+
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
