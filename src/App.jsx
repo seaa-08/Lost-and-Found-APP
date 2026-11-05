@@ -9,57 +9,15 @@ import Account from "./Pages/Account";
 import Setting from "./Pages/Setting";
 import NotFound from "./Pages/NotFound";
 
+import RequireAuth from "./components/RequireAuth";
+import { getCurrentUser, updateCurrentUser } from "./auth/authStore";
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 const App = () => {
   const [username, setUsername] = useState(
     () => window.localStorage.getItem("username") || ""
   );
-  const [darkMode, setDarkMode] = useState(
-    () => window.localStorage.getItem("darkMode") === "true"
-  );
-
-  const [doneChats, setDoneChats] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem("doneChats")) || {};
-    } catch {
-      return {};
-    }
-  });
-
-  useEffect(() => {
-    localStorage.setItem("doneChats", JSON.stringify(doneChats));
-  }, [doneChats]);
-
-  useEffect(() => {
-    if (username) {
-      window.localStorage.setItem("username", username);
-    } else {
-      window.localStorage.removeItem("username");
-    }
-  }, [username]);
-
-  const handleDone = (id) => {
-    setDoneChats((prev) => ({...prev, [id] : true}))
-  }
- 
-  useEffect(() => {
-    window.localStorage.setItem("darkMode", String(darkMode));
-  }, [darkMode]);
-
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Login onLogin={setUsername} />} />
-
-        <Route
-          path="/signup"
-          element={<Signup onSignup={setUsername} />}
-        />
-
-        <Route
-          path="/dashboard"
-          element={
           <Dashboard
             username={username}
             onSignOut={() => setUsername("")}
@@ -81,7 +39,10 @@ const App = () => {
             element={
               <Setting
                 username={username}
-                onUsernameChange={setUsername}
+                onUsernameChange={(name) => {
+                  updateCurrentUser({ username: name });
+                  setUsername(name);
+                }}
                 darkMode={darkMode}
                 onDarkModeChange={setDarkMode}
               />
