@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import profileImage from "../assets/zzy.jpg";
+import profileImage from "../assets/profil.jpg";
 
 const Sidebar = ({ username, onSignOut }) => (
     <aside className="dashboard-sidebar" id="dashboard-sidebar">
@@ -30,7 +30,7 @@ const Sidebar = ({ username, onSignOut }) => (
         >
             <img src={profileImage} alt="" className="sidebar-profile-avatar" />
             <span className="sidebar-profile-name">{username || "Pengguna"}</span>
-            <span className="sidebar-profile-caption">Profil pengguna</span>
+            <span className="sidebar-profile-caption">Profil {username || "Pengguna"}</span>
         </NavLink>
         <button
             type="button"

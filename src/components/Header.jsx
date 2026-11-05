@@ -41,7 +41,9 @@ const Header = ({ menuOpen, onMenuToggle, darkMode }) => {
         "/dashboard/account": "Profil",
         "/dashboard/setting": "Pengaturan",
     };
-    const title = pageTitles[pathname] || "Dashboard";
+    const title = pathname.startsWith("/dashboard/chat")
+        ? "Chat"
+        : pageTitles[pathname] || "Dashboard";
     const unreadCount = notifications.filter(
         (notification) => !notification.read
     ).length;

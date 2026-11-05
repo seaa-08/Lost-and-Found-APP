@@ -1,0 +1,43 @@
+.account-details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 16px 0 0;
+}
+
+.account-detail {
+  padding: 14px 18px;
+  border: 1px solid #d5e8f7;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.account-detail dt {
+  color: #8293a4;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.account-detail dd {
+  margin: 4px 0 0;
+  color: #263d52;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.dark-mode .account-detail {
+  border-color: #344658;
+  background: #1b2937;
+}
+
+.dark-mode .account-detail dd {
+  color: #e4edf6;
+}
+
+@media (max-width: 760px) {
+  .account-details {
+    grid-template-columns: 1fr;
+  }
+}
