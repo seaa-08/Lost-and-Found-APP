@@ -29,6 +29,7 @@ const getInitialPosts = () => {
 
 const Home = ({ username }) => {
     const [keyword, setKeyword] = useState("");
+    const [filterType, setFilterType] = useState("all"); // 'all' | 'lost' | 'found'
     const [allPosts, setAllPosts] = useState(getInitialPosts);
     const navigate = useNavigate();
 
@@ -46,16 +47,29 @@ const Home = ({ username }) => {
         setKeyword(value);
     };
 
-    const filteredData = keyword
-        ? allPosts.filter((item) => {
+    const filteredData = allPosts.filter((item) => {
+        const isLost = ["lost", "hilang"].includes(
+            String(item.status || item.type || "").toLowerCase()
+        );
+
+        // Filter berdasarkan tab type
+        if (filterType === "lost" && !isLost) return false;
+        if (filterType === "found" && isLost) return false;
+
+        // Filter berdasarkan search query
+        if (keyword) {
             const desc = item.description ? String(item.description).toLowerCase() : "";
             const title = item.title ? String(item.title).toLowerCase() : "";
-            const username = item.username ? String(item.username).toLowerCase() : "";
+            const author = item.username ? String(item.username).toLowerCase() : "";
+            const category = item.category ? String(item.category).toLowerCase() : "";
+            const location = item.location ? String(item.location).toLowerCase() : "";
             const query = keyword.toLowerCase();
 
-            return desc.includes(query) || title.includes(query) || username.includes(query);
-          })
-        : allPosts;
+            return desc.includes(query) || title.includes(query) || author.includes(query) || category.includes(query) || location.includes(query);
+        }
+
+        return true;
+    });
 
     return (
         <div className="home">
@@ -67,6 +81,55 @@ const Home = ({ username }) => {
                     Cari
                 </Button>
             </form>
+
+            {/* Quick Filter Tabs */}
+            <div style={{ display: "flex", gap: "10px", margin: "16px 0 24px", flexWrap: "wrap" }}>
+                <Button
+                    variant={filterType === "all" ? "contained" : "outlined"}
+                    size="small"
+                    onClick={() => setFilterType("all")}
+                    style={{
+                        borderRadius: "20px",
+                        textTransform: "none",
+                        fontWeight: 600,
+                        backgroundColor: filterType === "all" ? "#0284c7" : "transparent",
+                        borderColor: "#0284c7",
+                        color: filterType === "all" ? "#ffffff" : "#0284c7"
+                    }}
+                >
+                    Semua ({allPosts.length})
+                </Button>
+                <Button
+                    variant={filterType === "lost" ? "contained" : "outlined"}
+                    size="small"
+                    onClick={() => setFilterType("lost")}
+                    style={{
+                        borderRadius: "20px",
+                        textTransform: "none",
+                        fontWeight: 600,
+                        backgroundColor: filterType === "lost" ? "#ef4444" : "transparent",
+                        borderColor: "#ef4444",
+                        color: filterType === "lost" ? "#ffffff" : "#ef4444"
+                    }}
+                >
+                    🔍 Hilang (Lost)
+                </Button>
+                <Button
+                    variant={filterType === "found" ? "contained" : "outlined"}
+                    size="small"
+                    onClick={() => setFilterType("found")}
+                    style={{
+                        borderRadius: "20px",
+                        textTransform: "none",
+                        fontWeight: 600,
+                        backgroundColor: filterType === "found" ? "#10b981" : "transparent",
+                        borderColor: "#10b981",
+                        color: filterType === "found" ? "#ffffff" : "#10b981"
+                    }}
+                >
+                    📦 Ditemukan (Found)
+                </Button>
+            </div>
 
             <div className="feed">
                 {filteredData.length === 0 ? (
